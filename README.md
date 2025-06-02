@@ -18,6 +18,8 @@ Perfect for onboarding flows or feature discovery.
 Easily explain parts of your UI using customizable overlays and animations — no native dependencies, and it's very light.
 The reason i made this package, the ones on pub.dev were extremely slow on the web and on low-resources devices also crashed all the time.
 
+if you find this project useful, consider [Buy Me A Coffee](https://coff.ee/kibugenza), Thanks...
+
 ## Features
 
 - 🔍 Highlight any widget using its `GlobalKey`
@@ -36,7 +38,7 @@ To start using `explain_features_tutorial`, simply add it to your `pubspec.yaml`
 
 ```yaml
 dependencies:
-  explain_features_tutorial: ^0.0.5
+  explain_features_tutorial: ^0.0.8
 ```
 
 Then run: 
