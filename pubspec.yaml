@@ -4,6 +4,7 @@ version: 0.0.5
 homepage: https://king-kibugenza.web.app/explain_features_tutorial.html
 license: MIT
 example: example/
+repository: https://github.com/kibugenzaKing/explain_features_tutorial.git
 
 environment:
   sdk: ^3.5.3
