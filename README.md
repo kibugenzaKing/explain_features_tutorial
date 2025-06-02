@@ -16,6 +16,7 @@ and the Flutter guide for
 A lightweight Flutter package to visually guide users through your app by highlighting specific widgets step-by-step. 
 Perfect for onboarding flows or feature discovery.
 - 🔗 full source code Url: [Source Url](https://king-kibugenza.web.app/explain_features_tutorial.html)
+
 Easily explain parts of your UI using customizable overlays and animations — no native dependencies, and it's very light.
 The reason i made this package, the ones on pub.dev were extremely slow on the web and on low-resources devices also crashed all the time.
 
@@ -39,7 +40,7 @@ To start using `explain_features_tutorial`, simply add it to your `pubspec.yaml`
 
 ```yaml
 dependencies:
-  explain_features_tutorial: ^0.0.9
+  explain_features_tutorial: ^0.1.1
 ```
 
 Then run: 
