@@ -1,5 +1,69 @@
-import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:flutter/material.dart'
+    show
+        Animation,
+        AnimationController,
+        AppBar,
+        Border,
+        BorderRadius,
+        BoxDecoration,
+        BuildContext,
+        Canvas,
+        Center,
+        Color,
+        Colors,
+        Column,
+        Container,
+        CrossAxisAlignment,
+        Curve,
+        CurvedAnimation,
+        Curves,
+        CustomPaint,
+        CustomPainter,
+        EdgeInsets,
+        FadeTransition,
+        GlobalKey,
+        Icon,
+        IconButton,
+        Icons,
+        InkWell,
+        MainAxisAlignment,
+        MainAxisSize,
+        Material,
+        MaterialApp,
+        MediaQuery,
+        Offset,
+        Overlay,
+        OverlayEntry,
+        Padding,
+        Paint,
+        PaintingStyle,
+        Path,
+        PathFillType,
+        Positioned,
+        RRect,
+        Radius,
+        Rect,
+        RenderBox,
+        Row,
+        Scaffold,
+        Size,
+        SizedBox,
+        SlideTransition,
+        Spacer,
+        Stack,
+        State,
+        StatefulWidget,
+        StatelessWidget,
+        Text,
+        TextStyle,
+        ThemeData,
+        TickerProviderStateMixin,
+        Tween,
+        Widget,
+        WidgetsBinding,
+        runApp;
+import 'dart:async' show Future, Timer;
+import 'package:flutter/foundation.dart' show kDebugMode;
 
 /// A simple example showing how to use ExplainFeaturesTutorial.
 /// this is the application root,
@@ -85,10 +149,10 @@ class Home extends StatelessWidget {
 //! package starts from here,
 
 /// this constants defines the bubble height,
-const double _bubbleHeight = 150;
+const double _bubbleHeight = 170;
 
 /// defines the bubble width
-const double _bubbleWidth = 250;
+const double _bubbleWidth = 270;
 
 /// A simple widget that adds a fade and slide-in animation to its child.
 /// Used internally by the tutorial overlay to animate widgets into view.
@@ -171,6 +235,7 @@ class ExplainFeaturesTutorial extends StatefulWidget {
     this.showCancelButton = true,
     this.targetObserverColor = const Color.fromARGB(255, 171, 71, 188),
     this.showTutorial = true,
+    this.delayInSeconds = 10,
     super.key,
   });
 
@@ -202,6 +267,11 @@ class ExplainFeaturesTutorial extends StatefulWidget {
   /// else, not showing.
   final bool showTutorial;
 
+  /// these are seconds to delay before showing tutorial, it help to wait for every widget to paint. like if you have some widgets that maybe only paint after fetching some data online...
+  ///
+  /// adjust accordingly,
+  final int delayInSeconds;
+
   @override
   State<ExplainFeaturesTutorial> createState() =>
       _ExplainFeaturesTutorialState();
@@ -219,7 +289,10 @@ class _ExplainFeaturesTutorialState extends State<ExplainFeaturesTutorial> {
     if (!widget.showTutorial) return;
 
     // Begin showing the tutorial after the widget tree has been built.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future<void>.delayed(
+        Duration(seconds: widget.delayInSeconds),
+      );
       _showTutorial();
     });
   }
@@ -240,23 +313,16 @@ class _ExplainFeaturesTutorialState extends State<ExplainFeaturesTutorial> {
   }
 
   /// Builds the current step's overlay entry.
-  OverlayEntry _buildOverlay() {
+  OverlayEntry? _buildOverlay() {
     final BuildContext? currentContext =
         widget.widgetKeys[_step].currentContext;
 
     // Handle case where key context is not found.
     if (currentContext == null) {
-      return OverlayEntry(
-        builder: (_) => Material(
-          color: Colors.red.withOpacity(0.6),
-          child: const Center(
-            child: Text(
-              'Context is missing...',
-              style: TextStyle(fontSize: 20, color: Colors.white),
-            ),
-          ),
-        ),
-      );
+      if (kDebugMode) {
+        print('context is null, check if the widget is in the tree properly');
+      }
+      return null;
     }
 
     final RenderBox targetBox = currentContext.findRenderObject() as RenderBox;
@@ -322,10 +388,10 @@ class _ExplainFeaturesTutorialState extends State<ExplainFeaturesTutorial> {
                             widget.widgetExplainerText.elementAtOrNull(_step) ??
                                 '',
                             style: const TextStyle(
-                              fontSize: 17,
+                              fontSize: 16,
                               color: Colors.white,
                             ),
-                            maxLines: 6,
+                            maxLines: 3,
                           ),
                         ),
                       ),
@@ -333,7 +399,7 @@ class _ExplainFeaturesTutorialState extends State<ExplainFeaturesTutorial> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          // only show if it's true else next will be used alone, 
+                          // only show if it's true else next will be used alone,
                           if (widget.showCancelButton)
                             _AnimateViews(
                               delayInMilliseconds: 1500,
@@ -499,7 +565,7 @@ Widget _messageBubble({
     top: top,
     left: left,
     child: CustomPaint(
-      size: const Size(250, 150),
+      size: const Size(_bubbleWidth, _bubbleHeight),
       painter: _SpeechBubblePainter(targetObserverColor),
       child: child,
     ),

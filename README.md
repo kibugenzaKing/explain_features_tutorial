@@ -40,7 +40,7 @@ To start using `explain_features_tutorial`, simply add it to your `pubspec.yaml`
 
 ```yaml
 dependencies:
-  explain_features_tutorial: ^0.1.3
+  explain_features_tutorial: ^0.1.4
 ```
 
 Then run: 
