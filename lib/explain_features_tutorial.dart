@@ -4,10 +4,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 /// this constants defines the bubble height,
-const double bubbleHeight = 150;
+const double _bubbleHeight = 150;
 
 /// defines the bubble width
-const double bubbleWidth = 250;
+const double _bubbleWidth = 250;
 
 /// A simple widget that adds a fade and slide-in animation to its child.
 /// Used internally by the tutorial overlay to animate widgets into view.
@@ -89,11 +89,12 @@ class ExplainFeaturesTutorial extends StatefulWidget {
     this.next = 'Next',
     this.showCancelButton = true,
     this.targetObserverColor = const Color.fromARGB(255, 171, 71, 188),
+    this.showTutorial = true,
     super.key,
   });
 
   /// List of keys pointing to widgets that will be focused one by one.
-  final List<GlobalKey<State<StatefulWidget>>> widgetKeys;
+  final List<GlobalKey> widgetKeys;
 
   /// Corresponding explainer texts shown with each widget.
   final List<String> widgetExplainerText;
@@ -113,6 +114,13 @@ class ExplainFeaturesTutorial extends StatefulWidget {
   /// target observer color, like the bubble and the decoration,
   final Color targetObserverColor;
 
+  /// this bool determines if the tutorial will show or not??
+  ///
+  /// if [true] = showing,
+  ///
+  /// else, not showing.
+  final bool showTutorial;
+
   @override
   State<ExplainFeaturesTutorial> createState() =>
       _ExplainFeaturesTutorialState();
@@ -125,6 +133,10 @@ class _ExplainFeaturesTutorialState extends State<ExplainFeaturesTutorial> {
   @override
   void initState() {
     super.initState();
+
+    /// immediately return if show tutorial is false,
+    if (!widget.showTutorial) return;
+
     // Begin showing the tutorial after the widget tree has been built.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showTutorial();
@@ -210,14 +222,15 @@ class _ExplainFeaturesTutorialState extends State<ExplainFeaturesTutorial> {
                 ),
               ),
 
+              /// bubble to show on the message,
               _messageBubble(
                 context: context,
                 targetOffset: targetOffset,
                 targetSize: targetSize,
                 targetObserverColor: widget.targetObserverColor,
                 child: SizedBox(
-                  height: bubbleHeight,
-                  width: bubbleWidth,
+                  height: _bubbleHeight,
+                  width: _bubbleWidth,
                   child: Column(
                     children: <Widget>[
                       _AnimateViews(
@@ -235,14 +248,11 @@ class _ExplainFeaturesTutorialState extends State<ExplainFeaturesTutorial> {
                           ),
                         ),
                       ),
-
                       const Spacer(),
-
-                      // only show if it's true
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+                          // only show if it's true else next will be used alone,
                           if (widget.showCancelButton)
                             _AnimateViews(
                               delayInMilliseconds: 1500,
@@ -292,7 +302,6 @@ class _ExplainFeaturesTutorialState extends State<ExplainFeaturesTutorial> {
                   ),
                 ),
               ),
-              // Explanation text and optional cancel button
             ],
           ),
         );
@@ -360,6 +369,7 @@ class _SpotlightPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
+/// this is a message bubble drawer, it is used to position the bubble correctly on screen according to the position of the focused widget
 Widget _messageBubble({
   required BuildContext context,
   required Offset targetOffset,
@@ -393,7 +403,7 @@ Widget _messageBubble({
 
   double top = showBelow
       ? targetOffset.dy + targetSize.height + padding
-      : targetOffset.dy - bubbleWidth - padding;
+      : targetOffset.dy - _bubbleWidth - padding;
 
   // Prevent tooltip from going off-screen horizontally
   double left = targetOffset.dx;
