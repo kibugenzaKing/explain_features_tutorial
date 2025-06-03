@@ -20,13 +20,12 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<State<StatefulWidget>> appBarKey = GlobalKey();
-    final GlobalKey<State<StatefulWidget>> body1Key = GlobalKey();
-    final GlobalKey<State<StatefulWidget>> body2Key = GlobalKey();
-    final GlobalKey<State<StatefulWidget>> bottomNav = GlobalKey();
+    final GlobalKey appBarKey = GlobalKey();
+    final GlobalKey body1Key = GlobalKey();
+    final GlobalKey body2Key = GlobalKey();
+    final GlobalKey bottomNav = GlobalKey();
 
-    final List<GlobalKey<State<StatefulWidget>>> allKeys =
-        <GlobalKey<State<StatefulWidget>>>[
+    final List<GlobalKey> allKeys = <GlobalKey>[
       appBarKey,
       body2Key,
       body1Key,
@@ -71,7 +70,7 @@ class Home extends StatelessWidget {
         ),
         bottomNavigationBar: Row(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             Text(
               key: bottomNav,
               'Reach out for more help',

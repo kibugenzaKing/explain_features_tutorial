@@ -1,4 +1,4 @@
-## 0.1.1
+## 0.1.2
 
 First version of the package to help show users how to interact with your app.
 

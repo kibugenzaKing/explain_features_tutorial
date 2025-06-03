@@ -31,7 +31,7 @@ if you find this project useful, consider [Buy Me A Coffee](https://coff.ee/kibu
 - 🧱 100% Flutter — no platform channels or native code
 - 📦 Lightweight and easy to integrate
 
-![GIF showing Usage](https://firebasestorage.googleapis.com/v0/b/indrive-clone-520d9.appspot.com/o/explain_features_tutorial.webp?alt=media&token=58dba180-56c8-4d11-a640-00e2934843d9)
+![GIF showing Usage](https://firebasestorage.googleapis.com/v0/b/indrive-clone-520d9.appspot.com/o/explain_features_tutorial_v0.1.2.webp?alt=media&token=b242ce72-a589-4e1b-a70e-e8977f92e07f)
 
 
 ## Getting started
@@ -40,7 +40,7 @@ To start using `explain_features_tutorial`, simply add it to your `pubspec.yaml`
 
 ```yaml
 dependencies:
-  explain_features_tutorial: ^0.1.1
+  explain_features_tutorial: ^0.1.2
 ```
 
 Then run: 
