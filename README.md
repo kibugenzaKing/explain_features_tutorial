@@ -40,7 +40,7 @@ To start using `explain_features_tutorial`, simply add it to your `pubspec.yaml`
 
 ```yaml
 dependencies:
-  explain_features_tutorial: ^0.1.4
+  explain_features_tutorial: ^0.1.6
 ```
 
 Then run: 
@@ -56,7 +56,7 @@ import 'package:explain_features_tutorial/explain_features_tutorial.dart';
 
 ## Usage
 
-Wrap your app (or a specific screen) with `ExplainFeaturesTutorial` and pass in:
+Call `ExplainFeaturesTutorial(parameters).showTutorial()` as a function inside initState:
 
 - a list of `GlobalKey`s for the widgets you want to highlight
 - matching `widgetExplainerText` to describe each widget
@@ -72,31 +72,18 @@ final List<GlobalKey<State<StatefulWidget>>> allKeys = [
   textKey,
 ];
 
+// then simply call, 
+// it's a function, call it from InitState of a stateful widget, 
 ExplainFeaturesTutorial(
-  widgetKeys: allKeys,
-  widgetExplainerText: const [
-    'This is the action button',
-    'This is some important text',
-  ],
-  child: Scaffold(
-    appBar: AppBar(
-      actions: [
-        IconButton(
-          key: buttonKey,
-          icon: Icon(Icons.star),
-          onPressed: () {},
-        ),
+      widgetKeys: allKeys,
+      widgetExplainerText: const <String>[
+        'This is the app bar action button',
+        'Visit Site text on the body',
+        'First Widget on the body',
+        'Widget on bottom navigation bar for help',
       ],
-    ),
-    body: Center(
-      child: Text(
-        'Welcome!',
-        key: textKey,
-        style: TextStyle(fontSize: 20),
-      ),
-    ),
-  ),
-);
+      context: context,
+    ).showTutorial(delayInSeconds: 10);
 ```
 
 ## Additional information
