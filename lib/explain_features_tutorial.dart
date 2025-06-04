@@ -288,13 +288,18 @@ class _AnimateViewsState extends State<_AnimateViews>
   }
 
   @override
-  Widget build(BuildContext context) => FadeTransition(
-        opacity: _animController,
-        child: SlideTransition(
-          position: _animOffset,
-          child: widget.child,
-        ),
-      );
+  Widget build(BuildContext context) {
+    /// immediately return if animations is disabled,
+    if (widget.disableAnimations) return widget.child;
+
+    return FadeTransition(
+      opacity: _animController,
+      child: SlideTransition(
+        position: _animOffset,
+        child: widget.child,
+      ),
+    );
+  }
 }
 
 /// A custom widget that paints a dark overlay with a cut-out highlight
