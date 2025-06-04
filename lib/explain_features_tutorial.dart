@@ -1,59 +1,9 @@
 library explain_features_tutorial;
 
-import 'package:flutter/material.dart'
-    show
-        Animation,
-        AnimationController,
-        Border,
-        BorderRadius,
-        BoxDecoration,
-        BuildContext,
-        Canvas,
-        Color,
-        Colors,
-        Column,
-        Container,
-        Curve,
-        CurvedAnimation,
-        Curves,
-        CustomPaint,
-        CustomPainter,
-        EdgeInsets,
-        FadeTransition,
-        GlobalKey,
-        InkWell,
-        MainAxisAlignment,
-        Material,
-        MediaQuery,
-        Offset,
-        Overlay,
-        OverlayEntry,
-        Padding,
-        Paint,
-        PaintingStyle,
-        Path,
-        PathFillType,
-        Positioned,
-        RRect,
-        Radius,
-        Rect,
-        RenderBox,
-        Row,
-        Size,
-        SizedBox,
-        SlideTransition,
-        Spacer,
-        Stack,
-        State,
-        StatefulWidget,
-        StatelessWidget,
-        Text,
-        TextStyle,
-        TickerProviderStateMixin,
-        Tween,
-        Widget;
 import 'dart:async' show Future, Timer;
+
 import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/material.dart';
 
 /// this constants defines the bubble height,
 const double _bubbleHeight = 170;
@@ -73,8 +23,10 @@ class ExplainFeaturesTutorial {
     String cancelText = 'Cancel',
     String next = 'Next',
     bool showCancelButton = true,
+    bool disableButtonDelayAnimations = false,
     Color targetObserverColor = const Color.fromARGB(255, 171, 71, 188),
-  })  : _context = context,
+  })  : _disableButtonDelayAnimations = disableButtonDelayAnimations,
+        _context = context,
         _targetObserverColor = targetObserverColor,
         _next = next,
         _showCancelButton = showCancelButton,
@@ -102,6 +54,9 @@ class ExplainFeaturesTutorial {
 
   /// build context of the current UI,
   final BuildContext _context;
+
+  /// bool to disable button Delay animations,
+  final bool _disableButtonDelayAnimations;
 
   OverlayEntry? _overlayEntry;
   int _step = 0;
@@ -150,13 +105,9 @@ class ExplainFeaturesTutorial {
           child: Stack(
             children: <Widget>[
               // Dim the screen and spotlight the widget
-              _AnimateViews(
-                curve: Curves.easeIn,
-                delayInMilliseconds: 200,
-                child: _SpotlightOverlay(
-                  targetOffset: targetOffset,
-                  targetSize: targetSize,
-                ),
+              _SpotlightOverlay(
+                targetOffset: targetOffset,
+                targetSize: targetSize,
               ),
 
               // Highlighted border around the current widget
@@ -165,18 +116,15 @@ class ExplainFeaturesTutorial {
                 top: targetOffset.dy - 8,
                 child: InkWell(
                   onTap: _nextStep,
-                  child: _AnimateViews(
-                    delayInMilliseconds: 500,
-                    child: Container(
-                      width: targetSize.width + 16,
-                      height: targetSize.height + 16,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.transparent,
-                        border: Border.all(
-                          color: _targetObserverColor,
-                          width: 3,
-                        ),
+                  child: Container(
+                    width: targetSize.width + 16,
+                    height: targetSize.height + 16,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.transparent,
+                      border: Border.all(
+                        color: _targetObserverColor,
+                        width: 3,
                       ),
                     ),
                   ),
@@ -194,18 +142,15 @@ class ExplainFeaturesTutorial {
                   width: _bubbleWidth,
                   child: Column(
                     children: <Widget>[
-                      _AnimateViews(
-                        delayInMilliseconds: 300,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            _widgetExplainerText.elementAtOrNull(_step) ?? '',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                            maxLines: 4,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          _widgetExplainerText.elementAtOrNull(_step) ?? '',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
                           ),
+                          maxLines: 4,
                         ),
                       ),
                       const Spacer(),
@@ -215,7 +160,8 @@ class ExplainFeaturesTutorial {
                           // only show if it's true else next will be used alone,
                           if (_showCancelButton)
                             _AnimateViews(
-                              delayInMilliseconds: 1500,
+                              disableAnimations: _disableButtonDelayAnimations,
+                              delayInMilliseconds: 500,
                               child: InkWell(
                                 onTap: () => _nextStep(cancel: true),
                                 child: Container(
@@ -236,7 +182,8 @@ class ExplainFeaturesTutorial {
                             ),
                           const SizedBox(width: 10),
                           _AnimateViews(
-                            delayInMilliseconds: 500,
+                            disableAnimations: _disableButtonDelayAnimations,
+                            delayInMilliseconds: 300,
                             child: InkWell(
                               onTap: _nextStep,
                               child: Container(
@@ -275,8 +222,8 @@ class ExplainFeaturesTutorial {
 class _AnimateViews extends StatefulWidget {
   const _AnimateViews({
     required this.delayInMilliseconds,
+    required this.disableAnimations,
     required this.child,
-    this.curve = Curves.decelerate,
   });
 
   /// widget to animate,
@@ -285,8 +232,8 @@ class _AnimateViews extends StatefulWidget {
   /// delay in milliseconds,
   final int delayInMilliseconds;
 
-  /// curve,
-  final Curve curve;
+  /// bool to disable animations,
+  final bool disableAnimations;
 
   @override
   _AnimateViewsState createState() => _AnimateViewsState();
@@ -302,13 +249,15 @@ class _AnimateViewsState extends State<_AnimateViews>
   void initState() {
     super.initState();
 
+    if (widget.disableAnimations) return;
+
     _animController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
 
     final CurvedAnimation curve = CurvedAnimation(
-      curve: widget.curve,
+      curve: Curves.decelerate,
       parent: _animController,
     );
 
