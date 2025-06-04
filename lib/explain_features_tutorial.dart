@@ -24,8 +24,10 @@ class ExplainFeaturesTutorial {
     String next = 'Next',
     bool showCancelButton = true,
     bool disableButtonDelayAnimations = false,
+    String lastButtonText = 'Okay',
     Color targetObserverColor = const Color.fromARGB(255, 171, 71, 188),
-  })  : _disableButtonDelayAnimations = disableButtonDelayAnimations,
+  })  : _lastButtonText = lastButtonText,
+        _disableButtonDelayAnimations = disableButtonDelayAnimations,
         _context = context,
         _targetObserverColor = targetObserverColor,
         _next = next,
@@ -57,6 +59,9 @@ class ExplainFeaturesTutorial {
 
   /// bool to disable button Delay animations,
   final bool _disableButtonDelayAnimations;
+
+  /// last button text,
+  final String _lastButtonText;
 
   OverlayEntry? _overlayEntry;
   int _step = 0;
@@ -100,6 +105,9 @@ class ExplainFeaturesTutorial {
 
     return OverlayEntry(
       builder: (_) {
+        /// last overlay,
+        final bool notLastElement = _step != (_widgetKeys.length - 1);
+
         return Material(
           color: Colors.transparent,
           child: Stack(
@@ -158,7 +166,7 @@ class ExplainFeaturesTutorial {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           // only show if it's true else next will be used alone,
-                          if (_showCancelButton)
+                          if (notLastElement && _showCancelButton) ...<Widget>[
                             _AnimateViews(
                               disableAnimations: _disableButtonDelayAnimations,
                               delayInMilliseconds: 500,
@@ -180,7 +188,8 @@ class ExplainFeaturesTutorial {
                                 ),
                               ),
                             ),
-                          const SizedBox(width: 10),
+                            const SizedBox(width: 10),
+                          ],
                           _AnimateViews(
                             disableAnimations: _disableButtonDelayAnimations,
                             delayInMilliseconds: 300,
@@ -193,7 +202,7 @@ class ExplainFeaturesTutorial {
                                   color: Colors.blue.withOpacity(0.3),
                                 ),
                                 child: Text(
-                                  _next,
+                                  notLastElement ? _next : _lastButtonText,
                                   style: const TextStyle(
                                     fontSize: 20,
                                     color: Colors.white,
