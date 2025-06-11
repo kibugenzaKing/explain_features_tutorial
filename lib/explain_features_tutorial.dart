@@ -5,7 +5,7 @@ import 'dart:async' show Future, Timer;
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 
-/// this constants defines the bubble height,
+/// this constant defines the bubble height,
 const double _bubbleHeight = 170;
 
 /// defines the bubble width
@@ -63,8 +63,22 @@ class ExplainFeaturesTutorial {
   /// last button text,
   final String _lastButtonText;
 
+  /// overlay variable
   OverlayEntry? _overlayEntry;
+
+  /// step incrementer,
   int _step = 0;
+
+  // in vsCode this prints colors, or in a terminal,
+
+  /// green
+  final String _greenPrint = '\x1B[32m';
+
+  /// red
+  final String _redColorCode = '\x1B[31m';
+
+  /// reset color after print,
+  final String _resetColorCode = '\x1B[0m';
 
   /// Inserts an overlay for the current step.
   ///
@@ -83,7 +97,17 @@ class ExplainFeaturesTutorial {
     _overlayEntry?.remove();
     _step++;
 
-    if (cancel || _step == _widgetKeys.length) return;
+    if (cancel || _step == _widgetKeys.length) {
+      _overlayEntry?.dispose();
+
+      if (kDebugMode) {
+        print(
+          '${_greenPrint}Successfully disposed the resources$_resetColorCode',
+        );
+      }
+
+      return;
+    }
     showTutorial(delayInSeconds: 0);
   }
 
@@ -94,7 +118,9 @@ class ExplainFeaturesTutorial {
     // Handle case where key context is not found.
     if (currentContext == null) {
       if (kDebugMode) {
-        print('context is null, check if the widget is in the tree properly');
+        print(
+          '${_redColorCode}context is null, check if the widget is in the tree properly$_resetColorCode',
+        );
       }
       return null;
     }
