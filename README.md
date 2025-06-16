@@ -33,8 +33,8 @@ if you find this project useful, consider [Buy Me A Coffee](https://buymeacoffee
 ![GIF showing Usage](https://firebasestorage.googleapis.com/v0/b/indrive-clone-520d9.appspot.com/o/explain_features_tutorial_v0.1.2.webp?alt=media&token=b242ce72-a589-4e1b-a70e-e8977f92e07f)
 
 ## Parameters
-- required List<GlobalKey> widgetKeys
-- required List<String> widgetExplainerText
+- required List of GlobalKey: widgetKeys
+- required List of String: widgetExplainerText
 - required BuildContext context
 - String cancelText = "Cancel", 
 - String next = 'Next',
@@ -49,7 +49,7 @@ To start using `explain_features_tutorial`, simply add it to your `pubspec.yaml`
 
 ```yaml
 dependencies:
-  explain_features_tutorial: ^0.2.2
+  explain_features_tutorial: ^0.2.3
 ```
 
 Then run: 
