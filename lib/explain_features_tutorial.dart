@@ -69,17 +69,6 @@ class ExplainFeaturesTutorial {
   /// step incrementer,
   int _step = 0;
 
-  // in vsCode this prints colors, or in a terminal,
-
-  /// green
-  final String _greenPrint = '\x1B[32m';
-
-  /// red
-  final String _redColorCode = '\x1B[31m';
-
-  /// reset color after print,
-  final String _resetColorCode = '\x1B[0m';
-
   /// Inserts an overlay for the current step.
   ///
   /// and delays by 5 seconds to show up, please increment according to your needs.
@@ -101,8 +90,10 @@ class ExplainFeaturesTutorial {
       _overlayEntry?.dispose();
 
       if (kDebugMode) {
+        /// the 32m is a green color for vscode, and the last om codes, is the resettor.
+        /// to prevent everything turning green in your terminal.
         print(
-          '${_greenPrint}Successfully disposed the resources$_resetColorCode',
+          '\x1B[32m Successfully disposed the resources \x1B[0m',
         );
       }
 
@@ -119,7 +110,7 @@ class ExplainFeaturesTutorial {
     if (currentContext == null) {
       if (kDebugMode) {
         print(
-          '${_redColorCode}context is null, check if the widget is in the tree properly$_resetColorCode',
+          '\x1B[31m context is null, check if the widget is in the tree properly \x1B[0m',
         );
       }
       return null;
@@ -308,6 +299,10 @@ class _AnimateViewsState extends State<_AnimateViews>
 
   @override
   void dispose() {
+    // don't dispose the animation because it was never initialised...
+    // if this flag was true
+    if (widget.disableAnimations) return;
+
     timer?.cancel();
     _animController.dispose();
     super.dispose();
